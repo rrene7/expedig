@@ -5,7 +5,8 @@ CREATE TABLE directions (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(180) NOT NULL UNIQUE,
   code VARCHAR(30) NULL UNIQUE,
-  active TINYINT(1) NOT NULL DEFAULT 1
+  active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
 CREATE TABLE officers (
@@ -45,6 +46,7 @@ CREATE TABLE documents (
   document_date DATE NULL,
   description VARCHAR(500) NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT fk_documents_officer FOREIGN KEY (officer_id) REFERENCES officers(id) ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT fk_documents_type FOREIGN KEY (document_type_id) REFERENCES document_types(id) ON UPDATE CASCADE ON DELETE RESTRICT,
   INDEX idx_documents_officer (officer_id),
@@ -71,8 +73,9 @@ INSERT IGNORE INTO directions (name, code) VALUES
 
 INSERT IGNORE INTO document_types (name, category, required_flag) VALUES
 ('Solicitud de seguro', 'Seguro privado', 1),
+('Póliza vigente', 'Seguro privado', 1),
+('Formulario médico', 'Seguro privado', 1),
 ('Inclusión de dependiente', 'Seguro privado', 0),
-('Formulario médico', 'Seguro privado', 0),
 ('Reclamo', 'Seguro privado', 0),
 ('Actualización de póliza', 'Seguro privado', 0),
 ('Comprobante de pago', 'Seguro privado', 0),
